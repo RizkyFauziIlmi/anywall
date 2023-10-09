@@ -2,7 +2,7 @@
 ![Logo](https://raw.githubusercontent.com/RizkyFauziIlmi/anywall/main/icon-bg.png)
 <p align="center"><span style="color:red">⚠️ For educational purposes, not commercial. Do not use except in development environment</span></p>
 
-[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/RizkyFauziIlmi/anywall/blob/4e631f6f3ec57d065a2f32cfeb45a9ce85a0f5d7/LICENSE)
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/RizkyFauziIlmi/anywall/blob/815a1f7870412d7a26bcb3a5f70b92f695c028c9/LICENSE)
 
 
 # AnyWall
