@@ -1,0 +1,9 @@
+{
+  "name": "anywall",
+  "version": "0.2.3",
+  "type": "module",
+  "main": "index.js",
+  "author": "rizkyfauziilmi",
+  "license": "MIT",
+  "private": false
+}
