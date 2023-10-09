@@ -25,6 +25,10 @@ Cross-platform dekstop app for search and setting wallpaper
 ## requirements
 - Rust programming langguage [install now](https://www.rust-lang.org/tools/install)
 - NodeJS and NPM [install now](https://nodejs.org/en/download)
+- Tauri CLI
+  ``` bash
+  npm i -g @tauri-apps/cli
+  ```
 
 ## Tech Stack
 
@@ -45,7 +49,7 @@ Cross-platform dekstop app for search and setting wallpaper
 Clone the project
 
 ```bash
-  git clone repo.git
+  git clone https://github.com/RizkyFauziIlmi/anywall.git
 ```
 Go to the project directory
 
@@ -87,7 +91,7 @@ Install dependencies
 ```
 
 Start dev the server (default PORT 8080)
-**available PORT 3000, 5000, 8000, 8080**
+**available API PORT 3000, 5000, 8000, 8080**
 
 ```bash
   yarn tauri dev
