@@ -1,4 +1,3 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./styles.css";
@@ -10,6 +9,7 @@ import {
 import WallpaperDetail from "./components/wallpaper-detail";
 import { ThemeProvider } from "./components/theme-provider";
 import DatabaseDashboard from "./components/database-dashboard";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const router = createBrowserRouter([
   {
@@ -34,10 +34,12 @@ const router = createBrowserRouter([
   }
 ])
 
+const queryClient = new QueryClient();
+
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <React.StrictMode>
+  <QueryClientProvider client={queryClient}>
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
         <RouterProvider router={router} />
     </ThemeProvider>
-  </React.StrictMode>,
+  </QueryClientProvider>,
 );

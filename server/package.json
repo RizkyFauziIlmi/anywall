@@ -17,6 +17,7 @@
     "express-rate-limit": "^7.0.1",
     "morgan": "^1.10.0",
     "nodemon": "^3.0.1",
+    "query-string": "^8.1.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0"
   },

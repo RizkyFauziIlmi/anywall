@@ -1,7 +1,9 @@
 interface QueryDetail {
-  page: null | number;
+  page: number;
   categoryArrToLowerCase: string[];
   sorting: string;
+  totalPages: number;
+  totalWallpaper: number;
 }
 
 interface ImageData {

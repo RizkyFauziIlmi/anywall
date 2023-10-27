@@ -1,17 +1,16 @@
 import React from "react";
 import Search from "../top-bar";
-import { Separator } from "../ui/separator";
 
 interface AppLayoutProps {
     children: React.ReactNode,
-    isFullscreen?: boolean
+    isFullscreen?: boolean,
+    isSearch?: boolean,
 }
 
-export default function AppLayout ({ children, isFullscreen }: AppLayoutProps) {
+export default function AppLayout ({ children, isFullscreen, isSearch = true }: AppLayoutProps) {
     return(
         <div>
-            <Search isFullscreen={isFullscreen} />
-            <Separator />
+            <Search isFullscreen={isFullscreen} isSearch={isSearch} />
             {children}
         </div>
     )

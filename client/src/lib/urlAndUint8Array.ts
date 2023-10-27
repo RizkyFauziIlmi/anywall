@@ -14,3 +14,11 @@ export async function urlToUint8Array(url: string) {
     }
 }
 
+export function uint8ArrayToDataUri(uint8Array: Uint8Array) {
+  let binary = '';
+  const len = uint8Array.byteLength;
+  for (let i = 0; i < len; i++) {
+    binary += String.fromCharCode(uint8Array[i]);
+  }
+  return 'data:image/png;base64,' + window.btoa(binary);
+}
