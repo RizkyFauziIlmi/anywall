@@ -1,18 +1,29 @@
-import { fetchService } from "../lib/fetch.js";
+import { fetchService } from "../lib/fetch.ts";
 import * as cheerio from "cheerio";
-import { baseUrl } from "../constant/url.js";
+import { baseUrl } from "../constant/url.ts";
 import queryString from "query-string";
-import { extractNumbers } from "../lib/string.js";
+import { extractNumbers } from "../lib/string.ts";
+import { Response, Request } from "express";
+import {
+  QueryParametersSearch,
+  QueryDetailSearch,
+  WallpaperDataSearch,
+  QueryDetailWallpaper,
+  WallpaperDetail,
+  WallpaperProperties,
+} from "../types.ts";
 
 const Services = {
-  getSearch: async (req, res) => {
-    const page = parseInt(req.query.page) || 1;
-    const query = req.query.q || undefined;
-    const category = req.query.categories || undefined;
-    const sorting = req.query.sort || undefined;
-    const aiFilter = req.query.ai_art_filter || undefined;
+  getSearch: async (req: Request, res: Response) => {
+    const queryParams: QueryParametersSearch = {
+      page: parseInt(req.query.page as string) || 1,
+      q: (req.query.q as string) || undefined,
+      categories: (req.query.categories as string) || undefined,
+      sort: (req.query.sort as string) || undefined,
+      ai_art_filter: (req.query.ai_art_filter as string) || undefined,
+    };
 
-    const categoryArr = category?.trim().split(",");
+    const categoryArr = queryParams.categories?.trim().split(",");
     const categoryArrToLowerCase = categoryArr?.map((item) =>
       item.toLowerCase()
     );
@@ -25,21 +36,25 @@ const Services = {
       isPeople ? "1" : "0"
     }`;
 
-    let queryDetail = { page, query, categoryArrToLowerCase, sorting, query };
+    let queryDetail: QueryDetailSearch = {
+      page: queryParams.page,
+      query: queryParams.q,
+      categoryArrToLowerCase,
+      sorting: queryParams.sort,
+    };
 
-    let data = [];
+    let data: WallpaperDataSearch[] = [];
 
     let url = queryString.stringifyUrl({
       url: `${baseUrl}/search`,
       query: {
-        q: query,
-        page,
+        q: queryParams.q,
+        page: queryParams.page,
         categories: categoryCodex === "000" ? undefined : categoryCodex,
-        sorting: sorting?.toLowerCase(),
-        ai_art_filter: aiFilter,
+        sorting: queryParams.sort?.toLowerCase(),
+        ai_art_filter: queryParams.ai_art_filter,
       },
     });
-    console.log(url);
 
     try {
       const response = await fetchService(url, res);
@@ -47,12 +62,12 @@ const Services = {
         const $ = cheerio.load(response.data);
         const element = $(".thumb-listing-page");
 
-        let imageEndpoint,
-          previewUrl,
-          resolution,
-          isPng,
-          totalWallpaper,
-          totalPages;
+        let imageEndpoint: string | undefined,
+          previewUrl: string | undefined,
+          resolution: string,
+          isPng: boolean,
+          totalWallpaper: number,
+          totalPages: number;
 
         totalWallpaper = extractNumbers(
           $(".listing-header").find("h1").text()
@@ -65,9 +80,9 @@ const Services = {
           resolution = $(el).find(".wall-res").text();
           previewUrl = $(el).find("img").attr("data-src");
           imageEndpoint = $(el)
-            .find("a")
-            .attr("href")
-            .replace("https://wallhaven.cc/w/", "");
+            ?.find("a")
+            ?.attr("href")
+            ?.replace("https://wallhaven.cc/w/", "");
 
           data.push({
             isPng,
@@ -92,8 +107,8 @@ const Services = {
       });
     }
   },
-  getDetail: async (req, res) => {
-    const imageEndpoint = req.params.imageEndpoint;
+  getDetail: async (req: Request, res: Response) => {
+    const imageEndpoint: string | undefined = req.params.imageEndpoint;
 
     if (!imageEndpoint) {
       res.status(400).json({
@@ -102,8 +117,8 @@ const Services = {
       });
     }
 
-    const queryDetail = { imageEndpoint };
-    let data = [];
+    const queryDetail: QueryDetailWallpaper = { imageEndpoint };
+    let data: WallpaperDetail[] = [];
 
     const url = `${baseUrl}/w/${imageEndpoint}`;
 
@@ -115,18 +130,22 @@ const Services = {
         const elementSidebar = $("#showcase-sidebar");
         const elementMain = $("#showcase");
 
-        const resolution = elementSidebar.find(".showcase-resolution").text();
-        const propertiesText = elementSidebar
+        const resolution: string = elementSidebar
+          .find(".showcase-resolution")
+          .text();
+        const propertiesText: string = elementSidebar
           .find(".sidebar-section > dl")
           .text();
 
-        const parts = propertiesText.split(
+        const parts: string[] = propertiesText.split(
           /Category|Purity|Size|Views|Favorites/g
         );
 
-        const cleanedParts = parts.map((part) => part.trim().replace("-", ""));
+        const cleanedParts: string[] = parts.map((part) =>
+          part.trim().replace("-", "")
+        );
 
-        const properties = {
+        const properties: WallpaperProperties = {
           uploader: cleanedParts[0],
           uploaded: cleanedParts[1],
           category: cleanedParts[2],
@@ -136,14 +155,16 @@ const Services = {
           favorites: cleanedParts[6],
         };
 
-        const imageUrl = elementMain.find("img").attr("src");
-        const targetRemovedText = `${properties.uploaded} ${resolution
+        const imageUrl: string | undefined = elementMain
+          .find("img")
+          .attr("src");
+        const targetRemovedText: string = `${properties.uploaded} ${resolution
           .replace(" ", "")
           .replace(" ", "")} `;
         const name = elementMain
-          .find("img")
-          .attr("alt")
-          .replace(targetRemovedText, "");
+          ?.find("img")
+          ?.attr("alt")
+          ?.replace(targetRemovedText, "");
 
         data.push({
           name,

@@ -1,6 +1,7 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
+import { Response } from "express";
 
-export const fetchService = async (url, res) => {
+export const fetchService = async (url: string, res: Response): Promise<AxiosResponse> => {
     try {
         const response = await axios(url)
         return new Promise((resolve, reject) => {

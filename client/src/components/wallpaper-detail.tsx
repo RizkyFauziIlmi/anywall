@@ -209,22 +209,6 @@ export default function WallpaperDetail() {
   };
 
   useEffect(() => {
-    const initStatus = async () => {
-      if (!data) return;
-
-      const { imageUrl } = data.data;
-      const { imageEndpoint } = data.queryDetail;
-      const extension = getFileExtension(imageUrl);
-      const fileName = `${imageEndpoint}.${extension}`;
-
-      const isExist = await exists(fileName, { dir: BaseDirectory.AppData });
-      setIsDownloaded(isExist);
-    };
-
-    initStatus();
-  }, []);
-
-  useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [isImageFullscreen]);
 
@@ -251,6 +235,18 @@ export default function WallpaperDetail() {
 
   if (error) {
     return <NotFound />;
+  }
+
+  if (data) {
+    const initStatus = async () => {
+      const { imageUrl } = data.data;
+      const { imageEndpoint } = data.queryDetail;
+      const extension = getFileExtension(imageUrl);
+      const fileName = `${imageEndpoint}.${extension}`;
+      const isExist = await exists(fileName, { dir: BaseDirectory.AppData });
+      setIsDownloaded(isExist);
+    };
+    initStatus();
   }
 
   return (

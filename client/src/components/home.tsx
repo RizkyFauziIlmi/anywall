@@ -11,6 +11,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
 import EndOfContent from "./end-of-content";
 import { formatAngka } from "@/lib/string";
+import NotFound from "./not-found";
 
 export default function Home() {
   const location = useLocation();
@@ -71,6 +72,12 @@ export default function Home() {
   }, [inView, fetchNextPage, hasNextPage]);
 
   const isEnd = data?.pages[data.pages.length - 1].data.length === 0;
+
+  if (data?.pages[0].data.length === 0) {
+    return(
+      <NotFound />
+    )
+  }
 
   return (
     <>

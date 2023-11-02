@@ -1,6 +1,7 @@
-import { URL } from "../constant/port.js";
+import { SwaggerOptions } from "swagger-ui-express";
+import { URL } from "./port.ts";
 
-const swaggerOptions = {
+const swaggerOptions: SwaggerOptions = {
     definition: {
         openapi: "3.1.0",
         info: {

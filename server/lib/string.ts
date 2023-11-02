@@ -1,10 +1,10 @@
-export const extractNumbers = (inputString) => {
+export const extractNumbers = (inputString: string) => {
   const sanitizedString = inputString.replace(/,/g, ""); // Remove commas
   const numbers = sanitizedString.match(/\d+\.\d+|\d+/g) || [];
   return numbers.map((number) => parseFloat(number));
 };
 
-export const extractResolution = (inputString) => {
+export const extractResolution = (inputString: string) => {
   const parts = inputString.match(/\d+/g); // Mencocokkan angka dalam string
   if (parts && parts.length === 2) {
     return {

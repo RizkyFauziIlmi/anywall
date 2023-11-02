@@ -1,0 +1,14 @@
+{
+  // other settings..
+  "compilerOptions": {
+    // other compiler options...
+    "esModuleInterop": true,
+    "module": "ESNext", // "module": "CommonJS" should work too
+    "moduleResolution": "Node",
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    
+  },
+  "include": ["/**/*.ts", "test/get.spec.ts"],
+  "exclude": ["node_modules"]
+}

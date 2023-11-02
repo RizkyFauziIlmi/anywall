@@ -1,13 +1,10 @@
 import { Router } from "express";
-import Services from "../controllers/services.js";
+import Services from "../controllers/services.ts";
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc'
-import swaggerOptions from "../constant/swaggerOption.js";
+import swaggerOptions from "../constant/swaggerOption.ts";
 const route = Router()
 
-/**
- * TODO: Configuration deploy swagger for vercel
-*/
 const specs = swaggerJsdoc(swaggerOptions);
 route.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs ));
 
