@@ -11,7 +11,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
 import EndOfContent from "./end-of-content";
 import { formatAngka } from "@/lib/string";
-import NotFound from "./not-found";
+import ErrorPage from "./error-page";
 
 export default function Home() {
   const location = useLocation();
@@ -57,16 +57,23 @@ export default function Home() {
     return response.data as ApiResponseSearch;
   };
 
-  const { data, isSuccess, hasNextPage, fetchNextPage, isFetching } =
-    useInfiniteQuery({
-      queryKey: ["home", query, categories, sort, aiFilter],
-      queryFn: ({ pageParam }) => fetchData(pageParam as number),
-      initialPageParam: 1,
-      getNextPageParam: (lastPage) => lastPage.queryDetail.page + 1,
-    });
+  const {
+    data,
+    isSuccess,
+    hasNextPage,
+    fetchNextPage,
+    isFetching,
+    error,
+    refetch,
+  } = useInfiniteQuery({
+    queryKey: ["home", location.search],
+    queryFn: ({ pageParam }) => fetchData(pageParam as number),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => lastPage?.queryDetail.page + 1,
+  });
 
   useEffect(() => {
-    if (inView && hasNextPage) {
+    if (inView && hasNextPage && !isFetching) {
       fetchNextPage();
     }
   }, [inView, fetchNextPage, hasNextPage]);
@@ -74,9 +81,17 @@ export default function Home() {
   const isEnd = data?.pages[data.pages.length - 1].data.length === 0;
 
   if (data?.pages[0].data.length === 0) {
-    return(
-      <NotFound />
-    )
+    return <ErrorPage message="Wallpaper Not Found" statusCode={404} />;
+  }
+
+  if (error) {
+    return (
+      <ErrorPage
+        message="Internal Server Error"
+        statusCode={500}
+        refreshFc={refetch}
+      />
+    );
   }
 
   return (
@@ -86,10 +101,11 @@ export default function Home() {
           <Image />
           <div className="flex flex-col items-start">
             <p className="font-bold text-lg">
-              {formatAngka(data.pages[0].queryDetail.totalWallpaper)} Wallpapers
+              {formatAngka(data?.pages[0].queryDetail.totalWallpaper)}{" "}
+              Wallpapers
             </p>
             <p className="font-semibold text-sm opacity-50">
-              {formatAngka(data.pages[0].queryDetail.totalPages)} pages
+              {formatAngka(data?.pages[0].queryDetail.totalPages)} pages
             </p>
           </div>
         </div>

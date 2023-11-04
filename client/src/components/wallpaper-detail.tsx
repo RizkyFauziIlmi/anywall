@@ -37,7 +37,7 @@ import { appWindow } from "@tauri-apps/api/window";
 import { cn } from "@/lib/utils";
 import { baseUrl } from "@/constants/url";
 import { useQuery } from "@tanstack/react-query";
-import NotFound from "./not-found";
+import ErrorPage from "./error-page";
 
 export default function WallpaperDetail() {
   const bottomRef = useRef<null | HTMLDivElement>(null);
@@ -67,7 +67,7 @@ export default function WallpaperDetail() {
     return response.data as ApiResponseWallpaper;
   };
 
-  const { isPending, error, data } = useQuery({
+  const { isPending, error, data, refetch } = useQuery({
     queryKey: ["wallpaper", endpoint],
     queryFn: () => fetchData(),
   });
@@ -234,7 +234,7 @@ export default function WallpaperDetail() {
   }
 
   if (error) {
-    return <NotFound />;
+    return <ErrorPage statusCode={500} message="Error while load the wallpaper" refreshFc={refetch} />;
   }
 
   if (data) {

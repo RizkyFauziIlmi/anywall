@@ -96,7 +96,7 @@ export default function DatabaseDashboard() {
   if (loading) {
     return (
       <div className="h-screen w-screen flex flex-col justify-center items-center">
-        <FileDigit className="h-28 w-28 animate-bounce"/>
+        <FileDigit className="animate-bounce" size={80} />
         <div className="flex mb-2 items-center">
           <Button onClick={() => navigate(-1)} variant={"ghost"} size={"icon"}>
             <ChevronLeft />
